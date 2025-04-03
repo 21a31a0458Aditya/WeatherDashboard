@@ -6,19 +6,13 @@ import { Observable, catchError, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class WeatherService {
-  private apiKey = 'a09fe4d35a0943edb18182338250104';
-  private apiUrl = 'https://api.weatherapi.com/v1';
+  private backendApiUrl = 'http://localhost:5245/api/weather'; // Call ASP.NET backend
 
   constructor(private http: HttpClient) {}
 
   getForecast(location: string): Observable<any> {
-    const res = this.http
-      .get(
-        `${this.apiUrl}/forecast.json?key=${this.apiKey}&q=${location}&days=4`
-      )
+    return this.http.get(`${this.backendApiUrl}?location=${location}`)
       .pipe(catchError(this.handleError));
-
-    return res;
   }
 
   private handleError(error: HttpErrorResponse) {

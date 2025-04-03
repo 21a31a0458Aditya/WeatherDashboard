@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FavoritesService } from '../services/favorites.service';
+import { FavoritesComponent } from '../favorites/favorites.component';
 
 @Component({
   selector: 'app-weather',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [FormsModule, FavoritesComponent, CommonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './weather.component.html',
   styleUrl: './weather.component.scss',
 })
@@ -4081,8 +4083,14 @@ export class WeatherComponent {
       ],
     },
   };
-
-  constructor(private weatherService: WeatherService) {}
+  city: string = '';
+  constructor(private weatherService: WeatherService,private favoritesService: FavoritesService) {}
+  addToFavorites(): void {
+    if (this.city.trim() !== '') {
+      this.favoritesService.addFavorite(this.city);
+      alert(`${this.city} added to favorites!`);
+    }
+  }
 
   searchWeather() {
     if (this.location.trim()) {
